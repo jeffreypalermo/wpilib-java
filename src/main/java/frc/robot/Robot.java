@@ -5,10 +5,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.auto.CircleAutoController;
 import frc.robot.constants.DriveConstants;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.commands.Command;
+import frc.robot.commands.CommandScheduler;
 
 public class Robot extends TimedRobot {
   private Drivetrain drivetrain;
   private CircleAutoController autoController;
+  private final CommandScheduler commandScheduler = new CommandScheduler();
+  private Command autonomousPlan;
 
   @Override
   public void robotInit() {
@@ -28,10 +32,20 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     SmartDashboard.putString("Auto", "Circle drive started");
+    if (autonomousPlan != null) {
+      // reset internal timing
+      commandScheduler.cancelAll();
+      autonomousPlan.initialize();
+    }
   }
 
   @Override
   public void autonomousPeriodic() {
+    // If a plan is provided, run the scheduler
+    if (autonomousPlan != null) {
+      commandScheduler.run();
+      return;
+    }
     // Optionally allow runtime tuning from dashboard
     double radiusFeet = SmartDashboard.getNumber("CircleRadiusFeet", DriveConstants.DEFAULT_CIRCLE_RADIUS_FEET);
     double trackFeet = SmartDashboard.getNumber("TrackWidthFeet", DriveConstants.TRACK_WIDTH_FEET);
@@ -59,6 +73,7 @@ public class Robot extends TimedRobot {
     if (drivetrain != null) {
       drivetrain.stop();
     }
+  commandScheduler.cancelAll();
   }
 
   @Override
@@ -77,4 +92,7 @@ public class Robot extends TimedRobot {
    * to these speeds and scale so the larger magnitude equals baseSpeed.
    */
   // CircleTankKinematics now encapsulates the circle math.
+  public void setAutonomousPlan(Command plan) {
+    this.autonomousPlan = plan;
+  }
 }

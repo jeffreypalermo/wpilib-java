@@ -15,4 +15,9 @@ public final class DriveConstants {
 
   // Behavior
   public static final double BASE_SPEED = 0.4; // 0..1
+
+  // Motion model (approximate)
+  public static final double MAX_LINEAR_SPEED_FTPS = 6.0; // feet per second at full output
+  public static final double DEFAULT_LINEAR_SPEED_FTPS = 1.0; // typical cruising speed
+  public static final double DEFAULT_ANGULAR_SPEED_DPS = 90.0; // deg/sec for turns
 }
