@@ -103,7 +103,7 @@ public class Robot extends TimedRobot {
    * v_l = ω (R - L/2), v_r = ω (R + L/2). We output percentages proportional
    * to these speeds and scale so the larger magnitude equals baseSpeed.
    */
-  private static double[] computeCircleTankOutputs(double radiusFeet, double trackWidthFeet, double baseSpeed) {
+  static double[] computeCircleTankOutputs(double radiusFeet, double trackWidthFeet, double baseSpeed) {
     // Guard rails
     radiusFeet = Math.max(0.01, radiusFeet);
     trackWidthFeet = Math.max(0.01, trackWidthFeet);
