@@ -1,4 +1,4 @@
-# FTC Robot Support (FTC Starter Kit 2025–2026)
+# ftc-robot (FTC Starter Kit 2025–2026)
 
 This repo targets FTC. It provides:
 
