@@ -1,0 +1,33 @@
+#!/usr/bin/env pwsh
+# Block commits adding large files or banned paths (local distributions, archives, sim GUI)
+$ErrorActionPreference = 'Stop'
+$maxSizeMB = 25
+$bannedPatterns = @(
+  '^\.gradle-local/',
+  '^simgui.*\.json$',
+  '^networktables\.json$',
+  '.*\.(zip|tar|tar\.gz|tgz)$'
+)
+
+# Get staged additions
+$diff = git diff --cached --name-only --diff-filter=AM
+if (-not $diff) { exit 0 }
+
+foreach ($path in $diff) {
+  # Size check
+  $fsPath = Join-Path (Get-Location) $path
+  if (Test-Path $fsPath) {
+    $len = (Get-Item $fsPath).Length
+    if ($len -gt ($maxSizeMB * 1MB)) {
+      Write-Error "Blocked: $path is larger than $maxSizeMB MB ($([Math]::Round($len/1MB,2)) MB). Use Git LFS or ignore it."
+    }
+  }
+  # Pattern check
+  foreach ($pat in $bannedPatterns) {
+    if ($path -match $pat) {
+      Write-Error "Blocked: $path matches banned pattern '$pat' (local distributions or archives)."
+    }
+  }
+}
+
+exit 0

@@ -1,0 +1,11 @@
+# Mark common binary types to avoid EOL conversions
+*.jar binary
+*.zip binary
+*.tar binary
+*.tar.gz binary
+*.tgz binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
