@@ -1,0 +1,18 @@
+pluginManagement {
+    repositories {
+        maven { url = uri("https://frcmaven.wpi.edu/artifactory/release") }
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_PROJECT)
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url = uri("https://frcmaven.wpi.edu/artifactory/release") }
+    }
+}
+
+rootProject.name = "wpilib-java"

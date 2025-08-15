@@ -1,0 +1,15 @@
+# Gradle
+.gradle/
+build/
+out/
+gradle/wrapper/gradle-wrapper.jar
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
