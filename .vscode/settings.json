@@ -1,0 +1,17 @@
+{
+  // Enable Chat checkpoints so you can safely auto-allow tools and revert
+  "chat.checkpoints.enabled": true,
+  "chat.checkpoints.showFileChanges": true,
+  // Allow quick edits of previous chat requests
+  "chat.editRequests": "hover",
+
+  // Reduce VS Code confirmations unrelated to security
+  "terminal.integrated.confirmOnExit": "never",
+  "git.confirmSync": false,
+
+  // WPILib: avoid the Sim GUI selection prompt
+  "wpilib.skipSelectSimulateExtension": true,
+
+  // Workspace trust controls cannot auto-trust this folder, but keep trust enabled
+  "security.workspace.trust.enabled": true
+}

@@ -1,0 +1,42 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "gradle: build",
+      "type": "shell",
+      "command": ".\\gradlew.bat",
+  "args": ["--no-daemon", "build"],
+      "group": "build",
+      "presentation": { "reveal": "always" }
+    },
+    {
+      "label": "gradle: test",
+      "type": "shell",
+      "command": ".\\gradlew.bat",
+  "args": ["--no-daemon", "test"],
+      "group": "test",
+      "presentation": { "reveal": "always" }
+    },
+    {
+      "label": "gradle: wrapper",
+      "type": "shell",
+      "command": ".\\gradlew.bat",
+  "args": ["--no-daemon", "wrapper"],
+      "group": "build"
+    },
+    {
+      "label": "wpilib: simulate (debug)",
+      "type": "shell",
+      "command": ".\\gradlew.bat",
+  "args": ["--no-daemon", "simulateJavaDebug"],
+      "isBackground": false
+    },
+    {
+      "label": "wpilib: simulate (release)",
+      "type": "shell",
+      "command": ".\\gradlew.bat",
+  "args": ["--no-daemon", "simulateJava"],
+      "isBackground": false
+    }
+  ]
+}
