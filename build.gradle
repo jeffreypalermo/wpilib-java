@@ -1,5 +1,6 @@
 plugins {
     id "java"
+    id "application"
     id "edu.wpi.first.GradleRIO" version "2025.3.2"
 }
 
@@ -10,6 +11,12 @@ java {
 }
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
+// Enable desktop support (extract JNI for simulation)
+def includeDesktopSupport = true
+
+application {
+    mainClass = ROBOT_MAIN_CLASS
+}
 
 repositories {
     mavenLocal()
@@ -25,9 +32,41 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
+// Add desktop JNI natives so simulation can load required DLLs
+if (includeDesktopSupport) {
+    dependencies {
+        nativeDebug wpi.java.deps.wpilibJniDebug(wpi.platforms.desktop)
+        nativeRelease wpi.java.deps.wpilibJniRelease(wpi.platforms.desktop)
+    }
+}
+
 test {
     useJUnitPlatform()
 }
 
-wpi.java.configureExecutableTasks(ROBOT_MAIN_CLASS)
-wpi.java.configureTestTasks()
+// Set the entry point for the robot program so executables/simulation know what to run
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': ROBOT_MAIN_CLASS
+    }
+}
+
+// Simulation should run with the full runtimeClasspath and our Main class
+tasks.named('simulateJavaRelease', JavaExec).configure {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass.set(ROBOT_MAIN_CLASS)
+}
+tasks.named('simulateJavaDebug', JavaExec).configure {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass.set(ROBOT_MAIN_CLASS)
+}
+// Configure test tasks for JNI/runtime setup
+wpi.java.configureTestTasks(test)
+
+// Optional: enable simulation GUI and Driver Station by default
+wpi.sim.addGui().defaultEnabled = true
+wpi.sim.addDriverstation().defaultEnabled = true
