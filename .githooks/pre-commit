@@ -1,33 +1,43 @@
-#!/usr/bin/env pwsh
+#!/usr/bin/env sh
 # Block commits adding large files or banned paths (local distributions, archives, sim GUI)
-$ErrorActionPreference = 'Stop'
-$maxSizeMB = 25
-$bannedPatterns = @(
-  '^\.gradle-local/',
-  '^simgui.*\.json$',
-  '^networktables\.json$',
-  '.*\.(zip|tar|tar\.gz|tgz)$'
-)
 
-# Get staged additions
-$diff = git diff --cached --name-only --diff-filter=AM
-if (-not $diff) { exit 0 }
+max_size_mb=25
+max_size_bytes=$((max_size_mb * 1024 * 1024))
 
-foreach ($path in $diff) {
-  # Size check
-  $fsPath = Join-Path (Get-Location) $path
-  if (Test-Path $fsPath) {
-    $len = (Get-Item $fsPath).Length
-    if ($len -gt ($maxSizeMB * 1MB)) {
-      Write-Error "Blocked: $path is larger than $maxSizeMB MB ($([Math]::Round($len/1MB,2)) MB). Use Git LFS or ignore it."
-    }
-  }
+# Patterns are extended regexes matched against the repo-relative path
+banned_patterns='^\.gradle-local/|^simgui.*\.json$|^networktables\.json$|.*\.(zip|tar|tar\.gz|tgz)$'
+
+# Get staged additions (A) and modifications (M)
+files=$(git diff --cached --name-only --diff-filter=AM)
+[ -z "$files" ] && exit 0
+
+blocked=0
+
+for path in $files; do
+  # Size check (only for files that exist in working tree)
+  if [ -f "$path" ]; then
+    # byte size, portable
+    size_bytes=$(wc -c < "$path" | tr -d '[:space:]')
+    if [ "$size_bytes" -gt "$max_size_bytes" ]; then
+      # Print size in MB with two decimals (awk is available in Git for Windows)
+      size_mb=$(awk -v s="$size_bytes" 'BEGIN{printf "%.2f", s/1048576}')
+      echo "pre-commit: Blocked '$path' (${size_mb} MB > ${max_size_mb} MB)."
+      blocked=1
+    fi
+  fi
+
   # Pattern check
-  foreach ($pat in $bannedPatterns) {
-    if ($path -match $pat) {
-      Write-Error "Blocked: $path matches banned pattern '$pat' (local distributions or archives)."
-    }
-  }
-}
+  echo "$path" | grep -Eq "$banned_patterns"
+  if [ $? -eq 0 ]; then
+    # shellcheck disable=SC2016
+    echo "pre-commit: Blocked '$path' (matches banned pattern)."
+    blocked=1
+  fi
+done
+
+if [ "$blocked" -ne 0 ]; then
+  echo "Commit blocked due to large files or banned paths."
+  exit 1
+fi
 
 exit 0

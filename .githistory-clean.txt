@@ -1,0 +1,1 @@
+^\.gradle-local/\n^simgui.*\.json$\n^networktables\.json$\n^.*\.(zip|tar|tar\.gz|tgz)$
