@@ -5,16 +5,13 @@ build/
 out/
 
 
-# Legacy WPILib local data/cache (no longer used in FTC repo)
-.wpilib/
-
 # VS Code
 .vscode/
 
 # Logs
 *.log
 
-# WPILib Sim GUI local config
+# Robot config files (FTC SDK handles these in its own project)
 networktables.json
 simgui*.json
 

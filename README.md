@@ -1,6 +1,6 @@
 # FTC Robot Support (FTC Starter Kit 2025–2026)
 
-This repo now targets FTC (not FRC/WPILib). It provides:
+This repo targets FTC. It provides:
 
 - Drop-in FTC TeamCode for a 4-wheel, 4-motor drivetrain (Starter Kit 3200-4008-2526)
 - Circle-driving kinematics utility
