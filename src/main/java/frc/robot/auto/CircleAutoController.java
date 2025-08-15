@@ -1,6 +1,6 @@
 package frc.robot.auto;
 
-import frc.robot.math.CircleTankKinematics;
+import frc.robot.math.CircleDifferentialKinematics;
 
 /** Computes commands to drive in a circle. */
 public class CircleAutoController {
@@ -14,8 +14,8 @@ public class CircleAutoController {
     this.baseSpeed = baseSpeed;
   }
 
-  /** Compute the [left, right] tank outputs for the configured circle. */
-  public double[] computeTankOutputs() {
-    return CircleTankKinematics.tankOutputs(radiusFeet, trackWidthFeet, baseSpeed);
+  /** Compute the [left, right] differential side outputs for the configured circle. */
+  public double[] computeSideOutputs() {
+    return CircleDifferentialKinematics.computeSideOutputs(radiusFeet, trackWidthFeet, baseSpeed);
   }
 }

@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.auto.CircleAutoController;
 import frc.robot.constants.DriveConstants;
-import frc.robot.math.CircleTankKinematics;
 import frc.robot.subsystems.Drivetrain;
 
 public class Robot extends TimedRobot {
@@ -41,10 +40,10 @@ public class Robot extends TimedRobot {
     if (autoController == null) {
       autoController = new CircleAutoController(radiusFeet, trackFeet, base);
     }
-    double[] lr = autoController.computeTankOutputs();
-    SmartDashboard.putNumber("LeftOutput", lr[0]);
-    SmartDashboard.putNumber("RightOutput", lr[1]);
-    drivetrain.tank(lr[0], lr[1]);
+    double[] sideOutputs = autoController.computeSideOutputs();
+    SmartDashboard.putNumber("LeftOutput", sideOutputs[0]);
+    SmartDashboard.putNumber("RightOutput", sideOutputs[1]);
+    drivetrain.tank(sideOutputs[0], sideOutputs[1]);
   }
 
   @Override

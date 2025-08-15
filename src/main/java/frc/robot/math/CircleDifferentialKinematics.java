@@ -1,14 +1,14 @@
 package frc.robot.math;
 
-/** Kinematics for driving a differential drive in a circle at constant angular speed. */
-public final class CircleTankKinematics {
-  private CircleTankKinematics() {}
+/** Kinematics for driving a differential (left/right) drivetrain in a circle. */
+public final class CircleDifferentialKinematics {
+  private CircleDifferentialKinematics() {}
 
   /**
-   * Compute left/right outputs to follow a circle of a given radius (to robot center).
+   * Compute [left, right] side outputs to follow a circle of a given radius (to robot center).
    * Outputs are scaled so the larger magnitude equals baseSpeed (0..1).
    */
-  public static double[] tankOutputs(double radiusFeet, double trackWidthFeet, double baseSpeed) {
+  public static double[] computeSideOutputs(double radiusFeet, double trackWidthFeet, double baseSpeed) {
     radiusFeet = Math.max(0.01, radiusFeet);
     trackWidthFeet = Math.max(0.01, trackWidthFeet);
     baseSpeed = Math.max(0.0, Math.min(1.0, baseSpeed));
