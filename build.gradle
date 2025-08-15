@@ -2,6 +2,7 @@ plugins {
     id "java"
     id "application"
     id "edu.wpi.first.GradleRIO" version "2025.3.2"
+    id "jacoco"
 }
 
 java {
@@ -43,6 +44,45 @@ if (includeDesktopSupport) {
 test {
     useJUnitPlatform()
 }
+
+jacoco {
+    toolVersion = "0.8.12"
+}
+
+tasks.jacocoTestReport {
+    dependsOn test
+    def excludes = [
+        '**/frc/robot/Main*.class',
+        '**/frc/robot/Robot*.class',
+        '**/frc/robot/subsystems/Drivetrain*.class'
+    ]
+    classDirectories.setFrom(files(classDirectories.files.collect { fileTree(dir: it, exclude: excludes) }))
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+}
+
+tasks.jacocoTestCoverageVerification {
+    dependsOn test
+    def excludes = [
+        '**/frc/robot/Main*.class',
+        '**/frc/robot/Robot*.class',
+        '**/frc/robot/subsystems/Drivetrain*.class'
+    ]
+    classDirectories.setFrom(files(classDirectories.files.collect { fileTree(dir: it, exclude: excludes) }))
+    violationRules {
+        rule {
+            limit {
+                counter = 'INSTRUCTION'
+                value = 'COVEREDRATIO'
+                minimum = 0.95
+            }
+        }
+    }
+}
+
+test.finalizedBy(tasks.jacocoTestReport)
 
 // Set the entry point for the robot program so executables/simulation know what to run
 tasks.withType(JavaCompile).configureEach {

@@ -39,4 +39,32 @@ class DualMotorTest {
     assertEquals(-0.25, a.get(), 1e-9);
     assertEquals(-0.25, b.get(), 1e-9);
   }
+
+  @Test
+  void getReflectsLastCommandAndGetInvertedWorks() {
+    FakeMotor a = new FakeMotor();
+    FakeMotor b = new FakeMotor();
+    DualMotor dm = new DualMotor(a, b);
+    dm.set(0.5);
+    assertEquals(0.5, dm.get(), 1e-9);
+    assertFalse(dm.getInverted());
+    dm.setInverted(true);
+    assertTrue(dm.getInverted());
+    dm.set(0.6);
+    assertEquals(-0.6, dm.get(), 1e-9);
+  }
+
+  @Test
+  void disableAndStopMotorPropagateToChildren() {
+    FakeMotor a = new FakeMotor();
+    FakeMotor b = new FakeMotor();
+    DualMotor dm = new DualMotor(a, b);
+    dm.set(0.2);
+    dm.disable();
+    assertTrue(a.disabled);
+    assertTrue(b.disabled);
+    dm.stopMotor();
+    assertEquals(0.0, a.get(), 1e-9);
+    assertEquals(0.0, b.get(), 1e-9);
+  }
 }
