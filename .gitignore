@@ -5,6 +5,9 @@ build/
 out/
 gradle/wrapper/gradle-wrapper.jar
 
+# WPILib local data/cache
+.wpilib/
+
 # VS Code
 .vscode/
 
@@ -14,6 +17,12 @@ gradle/wrapper/gradle-wrapper.jar
 # WPILib Sim GUI local config
 networktables.json
 simgui*.json
+
+# Archives and distributions (do not commit vendor toolchains or gradle distributions here)
+*.zip
+*.tar
+*.tar.gz
+*.tgz
 
 # OS files
 .DS_Store
