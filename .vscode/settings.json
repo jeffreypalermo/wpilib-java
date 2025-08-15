@@ -8,10 +8,14 @@
   // Reduce VS Code confirmations unrelated to security
   "terminal.integrated.confirmOnExit": "never",
   "git.confirmSync": false,
+  "window.confirmBeforeClose": "never",
+  // Trust and suppress startup prompts in this workspace
+  "security.workspace.trust.enabled": true,
+  "security.workspace.trust.startupPrompt": "never",
 
   // WPILib: avoid the Sim GUI selection prompt
   "wpilib.skipSelectSimulateExtension": true,
 
-  // Workspace trust controls cannot auto-trust this folder, but keep trust enabled
-  "security.workspace.trust.enabled": true
+  // Tasks: allow automatic tasks without extra prompts
+  "task.allowAutomaticTasks": "on"
 }
