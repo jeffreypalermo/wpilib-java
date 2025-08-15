@@ -41,7 +41,7 @@ public class Robot extends TimedRobot {
     if (autoController == null) {
       autoController = new CircleAutoController(radiusFeet, trackFeet, base);
     }
-    double[] lr = autoController.next();
+    double[] lr = autoController.computeTankOutputs();
     SmartDashboard.putNumber("LeftOutput", lr[0]);
     SmartDashboard.putNumber("RightOutput", lr[1]);
     drivetrain.tank(lr[0], lr[1]);

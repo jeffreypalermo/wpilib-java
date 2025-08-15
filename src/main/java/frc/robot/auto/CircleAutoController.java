@@ -14,8 +14,8 @@ public class CircleAutoController {
     this.baseSpeed = baseSpeed;
   }
 
-  /** Return [left, right] tank outputs for this cycle. */
-  public double[] next() {
+  /** Compute the [left, right] tank outputs for the configured circle. */
+  public double[] computeTankOutputs() {
     return CircleTankKinematics.tankOutputs(radiusFeet, trackWidthFeet, baseSpeed);
   }
 }
