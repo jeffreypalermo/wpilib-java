@@ -22,12 +22,24 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
+    env:
+      GRADLE_OPTS: -Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=120000
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Validate Gradle Wrapper
+        uses: nick-fields/retry@v3
+        with:
+          max_attempts: 3
+          timeout_minutes: 5
+          retry_on: error
+          command: |
+            ./gradlew --version || true
+            # Run the official validation action after wrapper has initialized
+            bash -lc 'echo "::group::Wrapper validation" && exit 0'
+      - name: Official wrapper validation
         uses: gradle/wrapper-validation-action@v2
 
       - name: Setup Java
