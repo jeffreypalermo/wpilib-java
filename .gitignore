@@ -5,7 +5,7 @@ build/
 out/
 
 
-# WPILib local data/cache
+# Legacy WPILib local data/cache (no longer used in FTC repo)
 .wpilib/
 
 # VS Code

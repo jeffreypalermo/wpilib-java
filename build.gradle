@@ -1,7 +1,5 @@
 plugins {
     id "java"
-    id "application"
-    id "edu.wpi.first.GradleRIO" version "2025.3.2"
     id "jacoco"
 }
 
@@ -11,34 +9,14 @@ java {
     }
 }
 
-def ROBOT_MAIN_CLASS = "frc.robot.Main"
-// Enable desktop support (extract JNI for simulation)
-def includeDesktopSupport = true
-
-application {
-    mainClass = ROBOT_MAIN_CLASS
-}
-
 repositories {
     mavenLocal()
     mavenCentral()
-    maven { url = uri('https://frcmaven.wpi.edu/artifactory/release') }
 }
 
 dependencies {
-    implementation wpi.java.deps.wpilib()
-    implementation wpi.java.vendor.java()
-
     testImplementation(platform("org.junit:junit-bom:5.10.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
-}
-
-// Add desktop JNI natives so simulation can load required DLLs
-if (includeDesktopSupport) {
-    dependencies {
-        nativeDebug wpi.java.deps.wpilibJniDebug(wpi.platforms.desktop)
-        nativeRelease wpi.java.deps.wpilibJniRelease(wpi.platforms.desktop)
-    }
 }
 
 test {
@@ -51,12 +29,6 @@ jacoco {
 
 tasks.jacocoTestReport {
     dependsOn test
-    def excludes = [
-        '**/frc/robot/Main*.class',
-        '**/frc/robot/Robot*.class',
-        '**/frc/robot/subsystems/Drivetrain*.class'
-    ]
-    classDirectories.setFrom(files(classDirectories.files.collect { fileTree(dir: it, exclude: excludes) }))
     reports {
         xml.required.set(true)
         html.required.set(true)
@@ -65,12 +37,6 @@ tasks.jacocoTestReport {
 
 tasks.jacocoTestCoverageVerification {
     dependsOn test
-    def excludes = [
-        '**/frc/robot/Main*.class',
-        '**/frc/robot/Robot*.class',
-        '**/frc/robot/subsystems/Drivetrain*.class'
-    ]
-    classDirectories.setFrom(files(classDirectories.files.collect { fileTree(dir: it, exclude: excludes) }))
     violationRules {
         rule {
             limit {
@@ -84,29 +50,6 @@ tasks.jacocoTestCoverageVerification {
 
 test.finalizedBy(tasks.jacocoTestReport)
 
-// Set the entry point for the robot program so executables/simulation know what to run
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
-
-jar {
-    manifest {
-        attributes 'Main-Class': ROBOT_MAIN_CLASS
-    }
-}
-
-// Simulation should run with the full runtimeClasspath and our Main class
-tasks.named('simulateJavaRelease', JavaExec).configure {
-    classpath = sourceSets.main.runtimeClasspath
-    mainClass.set(ROBOT_MAIN_CLASS)
-}
-tasks.named('simulateJavaDebug', JavaExec).configure {
-    classpath = sourceSets.main.runtimeClasspath
-    mainClass.set(ROBOT_MAIN_CLASS)
-}
-// Configure test tasks for JNI/runtime setup
-wpi.java.configureTestTasks(test)
-
-// Optional: enable simulation GUI and Driver Station by default
-wpi.sim.addGui().defaultEnabled = true
-wpi.sim.addDriverstation().defaultEnabled = true

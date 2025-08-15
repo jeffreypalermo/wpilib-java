@@ -1,6 +1,5 @@
 pluginManagement {
     repositories {
-        maven { url = uri("https://frcmaven.wpi.edu/artifactory/release") }
         gradlePluginPortal()
         mavenCentral()
     }
@@ -11,8 +10,7 @@ dependencyResolutionManagement {
     repositories {
         mavenLocal()
         mavenCentral()
-        maven { url = uri("https://frcmaven.wpi.edu/artifactory/release") }
     }
 }
 
-rootProject.name = "wpilib-java"
+rootProject.name = "ftc-robot"

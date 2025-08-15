@@ -1,38 +1,26 @@
-# WPILib Java Robot Project
+# FTC Robot Support (FTC Starter Kit 2025–2026)
 
-This is a minimal WPILib Java project scaffold for an FRC-style robot using GradleRIO.
+This repo now targets FTC (not FRC/WPILib). It provides:
 
-## Requirements
-- JDK 17+
-- Gradle (if you don't have the Gradle Wrapper files in this repo)
-- WPILib dependencies are resolved from the WPILib Maven repo
+- Drop-in FTC TeamCode for a 4-wheel, 4-motor drivetrain (Starter Kit 3200-4008-2526)
+- Circle-driving kinematics utility
+- Unit tests for math/util components (runs on Java 17, no Android SDK needed)
 
-## Configure
-- Edit `.wpilib/wpilib_preferences.json` and set your real `teamNumber`.
+See `ftc/README-FTC.md` for instructions to copy the TeamCode into the official FTC SDK and deploy to the robot controller.
 
-## Build & Test
+## Build & Test (desktop)
 ```powershell
-# From the project root
-gradle build
+./gradlew test jacocoTestReport jacocoTestCoverageVerification
 ```
-
-## Run Desktop Simulation (optional)
-```powershell
-gradle simulateJava
-```
-
-If you prefer using the WPILib VS Code extension or the WPILib installer, you can also create and manage projects from there.
 
 ## Repo safeguards
 - Large/binary ignores: see `.gitignore` and `.gitattributes`.
-- Pre-commit guard: a hook blocks committing local distributions, sim GUI files, and files > 25MB.
+- Pre-commit guard: a hook blocks committing local distributions and files > 25MB.
 
 Enable the hook locally (one time):
 ```powershell
-# From the repo root
 git config core.hooksPath .githooks
 ```
 
 Recommended GitHub settings:
 - Protect `master` with “Require linear history” and “Require pull request reviews”.
-- Optionally enable Git LFS for legitimate large assets.
