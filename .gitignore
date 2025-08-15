@@ -1,5 +1,6 @@
 # Gradle
 .gradle/
+.gradle-local/
 build/
 out/
 gradle/wrapper/gradle-wrapper.jar
@@ -9,6 +10,10 @@ gradle/wrapper/gradle-wrapper.jar
 
 # Logs
 *.log
+
+# WPILib Sim GUI local config
+networktables.json
+simgui*.json
 
 # OS files
 .DS_Store
