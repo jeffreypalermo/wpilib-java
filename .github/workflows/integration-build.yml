@@ -23,7 +23,11 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
     env:
-      GRADLE_OPTS: -Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=120000
+      GRADLE_OPTS: >-
+        -Dorg.gradle.internal.http.connectionTimeout=60000
+        -Dorg.gradle.internal.http.socketTimeout=120000
+        -Djava.net.preferIPv4Stack=true
+        -Djava.net.preferIPv6Addresses=false
 
     steps:
       - name: Checkout
@@ -49,6 +53,27 @@ jobs:
           shell: powershell
           command: |
             .\gradlew.bat --version
+
+      - name: Pre-warm dependencies (Unix)
+        if: runner.os != 'Windows'
+        uses: nick-fields/retry@v3
+        with:
+          max_attempts: 3
+          timeout_minutes: 20
+          retry_on: error
+          command: |
+            ./gradlew -Dorg.gradle.caching=true compileJava testClasses -x test --no-daemon --stacktrace
+
+      - name: Pre-warm dependencies (Windows)
+        if: runner.os == 'Windows'
+        uses: nick-fields/retry@v3
+        with:
+          max_attempts: 3
+          timeout_minutes: 20
+          retry_on: error
+          shell: powershell
+          command: |
+            .\gradlew.bat -Dorg.gradle.caching=true compileJava testClasses -x test --no-daemon --stacktrace
       - name: Official wrapper validation
         uses: gradle/wrapper-validation-action@v2
 
