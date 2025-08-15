@@ -1,5 +1,7 @@
 # ftc-robot (FTC Starter Kit 2025–2026)
 
+[![Integration Build](https://github.com/jeffreypalermo/wpilib-java/actions/workflows/integration-build.yml/badge.svg?branch=master)](https://github.com/jeffreypalermo/wpilib-java/actions/workflows/integration-build.yml)
+
 This repo targets FTC. It provides:
 
 - Drop-in FTC TeamCode for a 4-wheel, 4-motor drivetrain (Starter Kit 3200-4008-2526)
