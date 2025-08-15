@@ -29,16 +29,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate Gradle Wrapper
+      - name: Init Gradle Wrapper (Unix)
+        if: runner.os != 'Windows'
         uses: nick-fields/retry@v3
         with:
           max_attempts: 3
           timeout_minutes: 5
           retry_on: error
           command: |
-            ./gradlew --version || true
-            # Run the official validation action after wrapper has initialized
-            bash -lc 'echo "::group::Wrapper validation" && exit 0'
+            ./gradlew --version
+
+      - name: Init Gradle Wrapper (Windows)
+        if: runner.os == 'Windows'
+        uses: nick-fields/retry@v3
+        with:
+          max_attempts: 3
+          timeout_minutes: 5
+          retry_on: error
+          shell: powershell
+          command: |
+            .\gradlew.bat --version
       - name: Official wrapper validation
         uses: gradle/wrapper-validation-action@v2
 
